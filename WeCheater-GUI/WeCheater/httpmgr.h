@@ -20,6 +20,7 @@ private:
     friend class Singleton<HttpMgr>;  // 基类可以访问子类 HttpMgr 的构造函数
     HttpMgr();
 
+public:
     /**
      * @brief PostHttpReq  发送 http 请求
      *    url 表示向哪个网络地址发送 http 请求

@@ -3,11 +3,15 @@
 
 
 #include "Server.h"
+#include "ConfigMgr.h"
 
 int main()
 {
+	ConfigMgr gCfgMgr;   // 定义一个  ConfigMgr 对象，这个对象在构造的时候会把配置全部读出来，下面可以直接访问
+	std::string gate_port_str = gCfgMgr["GateServer"]["Port"];
+	unsigned short gate_port = atoi(gate_port_str.c_str());
 	try {
-		unsigned short port = static_cast<unsigned short>(8080);
+		unsigned short port = static_cast<unsigned short>(gate_port);
 		net::io_context ioc{ 1 };  // 底层默认一个线程跑
 		boost::asio::signal_set signals(ioc, SIGINT, SIGTERM);
 		signals.async_wait([&ioc](const boost::system::error_code& error, int signal_errno) {

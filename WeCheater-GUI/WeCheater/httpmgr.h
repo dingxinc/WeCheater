@@ -32,8 +32,12 @@ private:
 private:
     QNetworkAccessManager _manager;
 
+private slots:
+    void slot_http_finish(ReqId id, QString res, ErrorCodes err, Modules mod);
+
 signals:
-    void sig_http_finish(ReqId req_id, QString res, ErrorCodes err, Modules mod);
+    void sig_http_finish(ReqId id, QString res, ErrorCodes err, Modules mod);
+    void sig_reg_mod_finish(ReqId id, QString res, ErrorCodes err);
 };
 
 #endif // HTTPMGR_H

@@ -9,6 +9,7 @@
 #include <mutex>
 #include <iostream>
 #include <QByteArray>
+#include <QNetworkReply>
 
 extern std::function<void(QWidget*)> repolish;  // 刷新 qss 样式
 

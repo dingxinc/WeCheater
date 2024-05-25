@@ -7,7 +7,7 @@ HttpMgr::~HttpMgr()
 
 HttpMgr::HttpMgr()
 {
-
+    connect(this, &HttpMgr::sig_http_finish, this, &HttpMgr::slot_http_finish)
 }
 
 void HttpMgr::PostHttpReq(QUrl url, QJsonObject json, ReqId req_id, Modules mod)

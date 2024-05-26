@@ -3,3 +3,4 @@
 /GateServer/GateServer
 /GateServer/x64
 /GateServer/GateServer.vcxproj.user
+/VarifyServer/node_modules

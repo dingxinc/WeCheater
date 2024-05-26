@@ -17,6 +17,8 @@
 
 extern std::function<void(QWidget*)> repolish;  // 刷新 qss 样式
 
+extern std::function<QString(QString)> xorString; // 异或密码
+
 /* 功能 id */
 enum ReqId {
     ID_GET_VARIFY_CODE = 1001,   // 获取验证码

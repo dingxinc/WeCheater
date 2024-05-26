@@ -279,7 +279,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="get_code">
+            <widget class="TimerBtn" name="get_code">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -315,7 +315,7 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
-            <widget class="QPushButton" name="confirm_btn">
+            <widget class="QPushButton" name="sure_btn">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -376,6 +376,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TimerBtn</class>
+   <extends>QPushButton</extends>
+   <header location="global">timerbtn.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -4,3 +4,7 @@
 /GateServer/x64
 /GateServer/GateServer.vcxproj.user
 /VarifyServer/node_modules
+/StatusServer/.vs
+/StatusServer/StatusServer
+/StatusServer/x64
+/StatusServer/StatusServer.vcxproj.user

@@ -8,6 +8,12 @@
 #include <json/json.h>
 #include <json/value.h>
 #include <json/reader.h>
+#include <jdbc/mysql_driver.h>
+#include <jdbc/mysql_connection.h>
+#include <jdbc/cppconn/prepared_statement.h>
+#include <jdbc/cppconn/resultset.h>
+#include <jdbc/cppconn/statement.h>
+#include <jdbc/cppconn/exception.h>
 #include "Singleton.h"
 #include <functional>
 #include <map>
@@ -53,6 +59,21 @@ enum ErrorCodes {
 };
 
 #define CODEPREFIX  "code_"  // nodejs 发送过来的 邮箱地址有验证码
+
+// Defer类
+class Defer {
+public:
+	// 接受一个lambda表达式或者函数指针
+	Defer(std::function<void()> func) : func_(func) {}
+
+	// 析构函数中执行传入的函数
+	~Defer() {
+		func_();
+	}
+
+private:
+	std::function<void()> func_;
+};
 
 //class ConfigMgr;
 //extern ConfigMgr gCfgMgr;   // 声明一个全局的 ConfigMgr 类对象

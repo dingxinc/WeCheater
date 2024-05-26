@@ -45,7 +45,7 @@ ChatServer StatusServiceImpl::getChatServer() {
 	std::lock_guard<std::mutex> guard(_server_mtx);
 	auto minServer = _servers.begin()->second;
 	// 使用范围基于for循环
-	for (const auto& server : _servers) {
+	for (const auto& server : _servers) {   // 找到连接数最小的那个 chatserver, 使得服务器的压力最小
 		if (server.second.con_count < minServer.con_count) {
 			minServer = server.second;
 		}

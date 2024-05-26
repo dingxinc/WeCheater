@@ -18,6 +18,7 @@
 #include <condition_variable>
 #include <queue>
 #include "hiredis.h"
+#include <cassert>
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -47,3 +48,6 @@ enum ErrorCodes {
 
 // 测试 redis 环境是否配置成功
 extern void TestRedis();
+
+// 测试 RedisMgr 类功能
+extern void TestRedisMgr();

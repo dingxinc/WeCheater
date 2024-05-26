@@ -34,6 +34,7 @@ private:
 
 public slots:
     void slot_forget_pwd();
+    void slot_login_mod_finish(ReqId id, QString res, ErrorCodes err);
 
 signals:
     void switchRegister();

@@ -28,7 +28,15 @@ private:
 
 private:
     void showTip(QString str, bool b_ok);
+    QMap<TipErr, QString> _tip_errs;           // 错误提示列表
     void initHttpHandlers();
+    void AddTipErr(TipErr te, QString tips);
+    void DelTipErr(TipErr te);
+    bool checkUserValid();        // 这些函数都是用于 注册界面上的 label 显示
+    bool checkPassValid();
+    bool checkEmailValid();
+    bool checkVarifyValid();
+    bool checkConfirmValid();
 };
 
 #endif // REGISTERDIALOG_H

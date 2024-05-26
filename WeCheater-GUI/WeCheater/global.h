@@ -37,6 +37,16 @@ enum ErrorCodes {
     ERR_NETWORK = 2 // 网络错误
 };
 
+enum TipErr{
+    TIP_SUCCESS = 0,
+    TIP_EMAIL_ERR = 1,
+    TIP_PWD_ERR = 2,
+    TIP_CONFIRM_ERR = 3,
+    TIP_PWD_CONFIRM = 4,
+    TIP_VARIFY_ERR = 5,
+    TIP_USER_ERR = 6
+};
+
 // GateServer 的 url 前缀
 extern QString gate_url_prefix;
 

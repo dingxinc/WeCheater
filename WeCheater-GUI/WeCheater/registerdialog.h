@@ -22,6 +22,8 @@ private slots:
 
     void on_sure_btn_clicked();
 
+    void on_return_btn_clicked();
+
 private:
     Ui::RegisterDialog *ui;
     QMap<ReqId, std::function<void(const QJsonObject&)>> _handlers;
@@ -37,6 +39,13 @@ private:
     bool checkEmailValid();
     bool checkVarifyValid();
     bool checkConfirmValid();
+    void ChangeTipPage();
+
+    QTimer* _countdown_timer;
+    int _countdown;        // 倒计时的数字
+
+signals:
+    void sigSwitchLogin();
 };
 
 #endif // REGISTERDIALOG_H

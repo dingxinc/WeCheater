@@ -3,16 +3,34 @@ const message_proto = require('./proto')
 const const_module = require('./const')
 const { v4: uuidv4 } = require('uuid')
 const emailModule = require('./email')
+const redis_module = require('./redis')
 
 async function GetVarifyCode(call, callback) {
     console.log("email is ", call.request.email)
-    try {
-        uniqueId = uuidv4();
+    try {  // key 值是 code_+ 邮箱名， 例如：code_754888460@qq.com, value 值是 对应的验证码
+        let query_res = await redis_module.GetRedis(const_module.code_prefix + call.request.email);
+        console.log("query_res is ", query_res)
+        let uniqueId = query_res;
+        if (query_res == null) {
+            uniqueId = uuidv4();  // 如果之前没有生成验证码，就生成一个
+            if (uniqueId.length > 4) {
+                uniqueId = uniqueId.substring(0, 4);  // 只取 4 位验证码
+            }
+            let bres = await redis_module.SetRedisExpire(const_module.code_prefix + call.request.email, uniqueId, 300)// 设置进 redis 中，5 分钟过期
+            if (!bres) {
+                callback(null, {
+                    email: call.request.email,
+                    error: const_module.Errors.RedisErr
+                });
+                return;
+            }
+        }
+
         console.log("uniqueId is ", uniqueId)
         let text_str = '您的验证码为' + uniqueId + '请三分钟内完成注册'
         //发送邮件
         let mailOptions = {
-            from: '754888460@qq.com',
+            from: 'secondtonone1@163.com',
             to: call.request.email,
             subject: '验证码',
             text: text_str,
@@ -35,7 +53,6 @@ async function GetVarifyCode(call, callback) {
             error: const_module.Errors.Exception
         });
     }
-
 }
 
 function main() {

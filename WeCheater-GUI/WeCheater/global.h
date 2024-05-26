@@ -37,7 +37,7 @@ enum ErrorCodes {
     ERR_NETWORK = 2 // 网络错误
 };
 
-enum TipErr{
+enum TipErr {
     TIP_SUCCESS = 0,
     TIP_EMAIL_ERR = 1,
     TIP_PWD_ERR = 2,
@@ -45,6 +45,11 @@ enum TipErr{
     TIP_PWD_CONFIRM = 4,
     TIP_VARIFY_ERR = 5,
     TIP_USER_ERR = 6
+};
+
+enum ClickLbState {
+    Normal = 0,
+    Selected = 1
 };
 
 // GateServer 的 url 前缀

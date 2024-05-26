@@ -2,6 +2,7 @@
 #include "ui_registerdialog.h"
 #include "global.h"
 #include "httpmgr.h"
+// #include "clickedlabel.h"
 
 RegisterDialog::RegisterDialog(QWidget *parent) :
     QDialog(parent),
@@ -42,6 +43,38 @@ RegisterDialog::RegisterDialog(QWidget *parent) :
 
     connect(ui->varify_edit, &QLineEdit::editingFinished, this, [this](){
             checkVarifyValid();
+    });
+
+    // 鼠标放在显示的 lable 上，鼠标变成小手的图标
+    ui->pass_visible->setCursor(Qt::PointingHandCursor);
+    ui->confirm_visible->setCursor(Qt::PointingHandCursor);
+
+    // 设置眼睛图片的 clickedLabel 的初始状态
+    ui->pass_visible->SetState("unvisible","unvisible_hover","","visible",
+                                "visible_hover","");
+
+    ui->confirm_visible->SetState("unvisible","unvisible_hover","","visible",
+                                    "visible_hover","");
+    //连接点击事件，密码编辑框和 眼睛 clickedLable 之间的信号与槽
+
+    connect(ui->pass_visible, &ClickedLabel::clicked, this, [this]() {
+        auto state = ui->pass_visible->GetCurState();
+        if(state == ClickLbState::Normal){
+            ui->pass_edit->setEchoMode(QLineEdit::Password);
+        }else{
+                ui->pass_edit->setEchoMode(QLineEdit::Normal);
+        }
+        qDebug() << "Label was clicked!";
+    });
+
+    connect(ui->confirm_visible, &ClickedLabel::clicked, this, [this]() {
+        auto state = ui->confirm_visible->GetCurState();
+        if(state == ClickLbState::Normal){
+            ui->confirm_edit->setEchoMode(QLineEdit::Password);
+        }else{
+                ui->confirm_edit->setEchoMode(QLineEdit::Normal);
+        }
+        qDebug() << "Label was clicked!";
     });
 }
 
@@ -255,33 +288,23 @@ void RegisterDialog::initHttpHandlers()
 
 void RegisterDialog::on_sure_btn_clicked()
 {
-    if(ui->user_edit->text() == ""){
-        showTip(tr("用户名不能为空"), false);
+    bool valid = checkUserValid();
+    if(!valid){
         return;
     }
 
-    if(ui->email_edit->text() == ""){
-        showTip(tr("邮箱不能为空"), false);
+    valid = checkEmailValid();
+    if(!valid){
         return;
     }
 
-    if(ui->pass_edit->text() == ""){
-        showTip(tr("密码不能为空"), false);
+    valid = checkPassValid();
+    if(!valid){
         return;
     }
 
-    if(ui->confirm_edit->text() == ""){
-        showTip(tr("确认密码不能为空"), false);
-        return;
-    }
-
-    if(ui->confirm_edit->text() != ui->pass_edit->text()){
-        showTip(tr("密码和确认密码不匹配"), false);
-        return;
-    }
-
-    if(ui->varify_edit->text() == ""){
-        showTip(tr("验证码不能为空"), false);
+    valid = checkVarifyValid();
+    if(!valid){
         return;
     }
 

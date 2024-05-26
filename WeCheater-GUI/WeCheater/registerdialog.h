@@ -24,6 +24,8 @@ private slots:
 
     void on_return_btn_clicked();
 
+    void on_cancel_btn_clicked();
+
 private:
     Ui::RegisterDialog *ui;
     QMap<ReqId, std::function<void(const QJsonObject&)>> _handlers;

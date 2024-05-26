@@ -32,7 +32,8 @@ enum ReqId {
 /* 模块 ，功能属于哪一个 模块 */
 enum Modules {
     REGISTERMOD = 0,   // 注册模块
-    RESETMOD = 1       // 重置模块
+    RESETMOD = 1,       // 重置模块
+    LOGINMOD = 2        // 登录模块
 };
 
 /* 错误码 */
@@ -55,6 +56,13 @@ enum TipErr {
 enum ClickLbState {
     Normal = 0,
     Selected = 1
+};
+
+struct ServerInfo {
+    QString Host;
+    QString Port;
+    QString Token;
+    int Uid;
 };
 
 // GateServer 的 url 前缀

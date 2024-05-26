@@ -12,6 +12,25 @@ using message::GetVarifyReq;
 using message::GetVarifyRsp;
 using message::VarifyService;
 
+/* RPC 的连接池 */
+class RPConPool {
+public:
+	RPConPool(size_t poosize, std::string host, std::string port);
+	~RPConPool();
+	void Close();
+	std::unique_ptr<VarifyService::Stub> getConnection();                  // 取连接
+	void returnConnection(std::unique_ptr<VarifyService::Stub> context);   // 还连接
+
+private:
+	std::atomic<bool> b_stop_;   // 停止标志位
+	size_t poolSize_;
+	std::string host_;
+	std::string port_;
+	std::queue<std::unique_ptr<VarifyService::Stub>> connections_;
+	std::condition_variable cond_;
+	std::mutex mutex_;
+};
+
 class VarifyGrpcClient : public Singleton<VarifyGrpcClient>
 {
 	friend class Singleton<VarifyGrpcClient>;
@@ -22,21 +41,22 @@ public:
 		GetVarifyReq request;                        // 请求
 		request.set_email(email);                    // 把 email 设置进去
 
-		Status status = stub_->GetVarifyCode(&context, request, &reply);      // 远程调用获取验证码的服务，会回包一个状态
+		auto stub = pool_->getConnection();          // 取连接
+		Status status = stub->GetVarifyCode(&context, request, &reply);      // 远程调用获取验证码的服务，会回包一个状态
 		if (status.ok()) {
+			pool_->returnConnection(std::move(stub));// 还连接
 			return reply;
 		}
 		else {
+			pool_->returnConnection(std::move(stub));// 还连接
 			reply.set_error(ErrorCodes::RPCFailed);
 			return reply;
 		}
 	}
 
 private:
-	VarifyGrpcClient() {
-		std::shared_ptr<Channel> channel = grpc::CreateChannel("127.0.0.1:50051", grpc::InsecureChannelCredentials());
-		stub_ = VarifyService::NewStub(channel);    // 信使相当于电话员， channel 相当于电话，通过 channel 与服务器通信
-	}
-	std::unique_ptr<VarifyService::Stub> stub_;      // 信使，只有通过它才能和别人通信
+	VarifyGrpcClient();
+	// std::unique_ptr<VarifyService::Stub> stub_;      // 信使，只有通过它才能和别人通信
+	std::unique_ptr<RPConPool> pool_;
 };
 

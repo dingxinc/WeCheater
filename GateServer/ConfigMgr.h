@@ -27,7 +27,6 @@ struct SectionInfo {  // Section 表示一个片段，每一个 Section 下面都有键值对，例
 class ConfigMgr
 {
 public:
-	ConfigMgr();
 	~ConfigMgr() { _config_map.clear(); }
 	ConfigMgr(const ConfigMgr& src);
 	ConfigMgr& operator=(const ConfigMgr& src);
@@ -38,6 +37,14 @@ public:
 		}
 		return _config_map[section];
 	}
+
+	static ConfigMgr& GetInstance() {   // 单例模式，局部静态变量生命周期与进程同步，且线程安全，C++11 之后
+		static ConfigMgr cfg_mgr;
+		return cfg_mgr;
+	}
+
+private:
+	ConfigMgr();
 
 private:
 	std::map<std::string, SectionInfo> _config_map;  // key 是 section 的名字，value 是整个 section 的数据

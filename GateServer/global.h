@@ -13,6 +13,10 @@
 #include <map>
 #include <unordered_map>
 #include <string>
+#include <vector>
+#include <thread>
+#include <condition_variable>
+#include <queue>
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -37,5 +41,5 @@ enum ErrorCodes {
     RPCFailed = 1002,  //RPC请求错误
 };
 
-class ConfigMgr;
-extern ConfigMgr gCfgMgr;   // 声明一个全局的 ConfigMgr 类对象
+//class ConfigMgr;
+//extern ConfigMgr gCfgMgr;   // 声明一个全局的 ConfigMgr 类对象

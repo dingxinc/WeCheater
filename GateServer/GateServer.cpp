@@ -7,6 +7,7 @@
 
 int main()
 {
+    // TestRedis();
 	// ConfigMgr gCfgMgr;   // 定义一个  ConfigMgr 对象，这个对象在构造的时候会把配置全部读出来，下面可以直接访问
 	auto& gCfgMgr = ConfigMgr::GetInstance();
 	std::string gate_port_str = gCfgMgr["GateServer"]["Port"];

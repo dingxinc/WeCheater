@@ -1,5 +1,6 @@
 #include "tcpmgr.h"
 #include <QAbstractSocket>
+#include "usermgr.h"
 
 TcpMgr::TcpMgr():_host(""),_port(0),_b_recv_pending(false),_message_id(0),_message_len(0)
 {
@@ -133,9 +134,9 @@ void TcpMgr::initHandlers()
             return;
         }
 
-//        UserMgr::GetInstance()->SetUid(jsonObj["uid"].toInt());
-//        UserMgr::GetInstance()->SetName(jsonObj["name"].toString());
-//        UserMgr::GetInstance()->SetToken(jsonObj["token"].toString());
+        UserMgr::GetInstance()->SetUid(jsonObj["uid"].toInt());
+        UserMgr::GetInstance()->SetName(jsonObj["name"].toString());
+        UserMgr::GetInstance()->SetToken(jsonObj["token"].toString());
         emit sig_swich_chatdlg();   // 通知跳转到聊天界面
     });
 }

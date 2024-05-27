@@ -5,12 +5,12 @@
 Server::Server(boost::asio::io_context& io_context, short port):_io_context(io_context), _port(port),
 _acceptor(io_context, tcp::endpoint(tcp::v4(),port))
 {
-	cout << "Server start success, listen on port : " << _port << endl;
+	cout << "Chat Server start success, listen on port : " << _port << endl;
 	StartAccept();
 }
 
 Server::~Server() {
-	cout << "Server destruct listen on port : " << _port << endl;
+	cout << "Chat Server destruct listen on port : " << _port << endl;
 }
 
 void Server::HandleAccept(shared_ptr<Session> new_session, const boost::system::error_code& error){

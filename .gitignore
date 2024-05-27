@@ -8,3 +8,7 @@
 /StatusServer/StatusServer
 /StatusServer/x64
 /StatusServer/StatusServer.vcxproj.user
+/ChatServer/.vs
+/ChatServer/ChatServer
+/ChatServer/x64
+/ChatServer/ChatServer.vcxproj.user

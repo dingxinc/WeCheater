@@ -14,6 +14,7 @@
 #include <QDir>
 #include <QFile>
 #include <QSettings>   // 读取 .ini 配置文件使用
+#include <QJsonDocument>
 
 extern std::function<void(QWidget*)> repolish;  // 刷新 qss 样式
 

@@ -27,7 +27,7 @@ message GetChatServerRsp {
   string token = 4;
 }
 
-message LoginReq{
+message LoginReq {
 	int32 uid = 1;
 	string token= 2;
 }
@@ -38,7 +38,8 @@ message LoginRsp {
 	string token = 3;
 }
 
+/* 客户端向聊天服务器发送 uid 和 token，聊天服务器将 token 发送给状态服务器进行验证 */
 service StatusService {
 	rpc GetChatServer (GetChatServerReq) returns (GetChatServerRsp) {}
-	rpc Login(LoginReq) returns(LoginRsp);
+	rpc Login(LoginReq) returns(LoginRsp);// 聊天服务器会向状态服务器发送一个请求，验证登录是否合理
 }

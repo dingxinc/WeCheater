@@ -13,6 +13,7 @@ Session::Session(boost::asio::io_context& io_context, Server* server):
 	_uuid = boost::uuids::to_string(a_uuid);
 	_recv_head_node = make_shared<MsgNode>(HEAD_TOTAL_LEN);
 }
+
 Session::~Session() {
 	std::cout << "~Session destruct" << std::endl;
 }
@@ -31,7 +32,7 @@ void Session::Start(){
 
 void Session::Send(std::string msg, short msgid) {
 	std::lock_guard<std::mutex> lock(_send_lock);
-	int send_que_size = _send_que.size();
+	int send_que_size = _send_que.size();   // 异步发送为什么使用队列？队列能保证异步发送数据的有序性
 	if (send_que_size > MAX_SENDQUE) {
 		std::cout << "session: " << _uuid << " send que fulled, size is " << MAX_SENDQUE << std::endl;
 		return;
@@ -104,7 +105,7 @@ void Session::AsyncReadBody(int total_len)
 		catch (std::exception& e) {
 			std::cout << "Exception code is " << e.what() << endl;
 		}
-		});
+	});
 }
 
 void Session::AsyncReadHead(int total_len)
@@ -161,7 +162,7 @@ void Session::AsyncReadHead(int total_len)
 		catch (std::exception& e) {
 			std::cout << "Exception code is " << e.what() << endl;
 		}
-		});
+	});
 }
 
 void Session::HandleWrite(const boost::system::error_code& error, std::shared_ptr<Session> shared_self) {
@@ -201,7 +202,7 @@ void Session::asyncReadLen(std::size_t read_len, std::size_t total_len,
 	std::function<void(const boost::system::error_code&, std::size_t)> handler)
 {
 	auto self = shared_from_this();
-	_socket.async_read_some(boost::asio::buffer(_data + read_len, total_len-read_len),
+	_socket.async_read_some(boost::asio::buffer(_data + read_len, total_len - read_len),// 构造一个 buffer, 第一个参数是已经读的数据，第二个参数是未读的数据
 		[read_len, total_len, handler, self](const boost::system::error_code& ec, std::size_t  bytesTransfered) {
 			if (ec) {
 				// 出现错误，调用回调函数

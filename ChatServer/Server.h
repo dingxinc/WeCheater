@@ -17,6 +17,8 @@ public:
 private:
 	void HandleAccept(shared_ptr<Session>, const boost::system::error_code & error);
 	void StartAccept();
+
+private:
 	boost::asio::io_context &_io_context;
 	short _port;
 	tcp::acceptor _acceptor;

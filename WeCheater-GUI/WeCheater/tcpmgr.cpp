@@ -137,7 +137,7 @@ void TcpMgr::initHandlers()
         UserMgr::GetInstance()->SetUid(jsonObj["uid"].toInt());
         UserMgr::GetInstance()->SetName(jsonObj["name"].toString());
         UserMgr::GetInstance()->SetToken(jsonObj["token"].toString());
-        emit sig_swich_chatdlg();   // 通知跳转到聊天界面
+        emit sig_switch_chatdlg();   // 通知跳转到聊天界面
     });
 }
 

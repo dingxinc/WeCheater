@@ -196,8 +196,8 @@ void LoginDialog::DelTipErr(TipErr te)
 {
     _tip_errs.remove(te);
     if(_tip_errs.empty()){
-      ui->err_tip->clear();
-      return;
+        ui->err_tip->clear();
+        return;
     }
 
     showTip(_tip_errs.first(), false);

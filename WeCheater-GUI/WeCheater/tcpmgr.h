@@ -32,7 +32,7 @@ public slots:
 signals:
     void sig_con_success(bool bsuccess);  // 连接成功发送信号，告诉其他界面
     void sig_send_data(ReqId reqId, QString data);
-    void sig_swich_chatdlg();
+    void sig_switch_chatdlg();
     void sig_login_failed(int);  // 登录失败发送信号
 };
 

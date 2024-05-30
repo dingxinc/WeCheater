@@ -9,7 +9,7 @@ RegisterDialog::RegisterDialog(QWidget *parent) :
     ui(new Ui::RegisterDialog), _countdown(5)
 {
     ui->setupUi(this);
-    ui->pass_edit->setEchoMode(QLineEdit::Password);
+    ui->pass_edit->setEchoMode(QLineEdit::Password);          // 设置密码格式
     ui->confirm_edit->setEchoMode(QLineEdit::Password);
 
     // 设置 err_tip 的属性

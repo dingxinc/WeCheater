@@ -59,4 +59,3 @@ private:
 	// std::unique_ptr<VarifyService::Stub> stub_;      // 信使，只有通过它才能和别人通信
 	std::unique_ptr<RPConPool> pool_;
 };
-

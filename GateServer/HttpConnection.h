@@ -18,7 +18,7 @@ private:
 private:
 	tcp::socket _socket;
 	beast::flat_buffer _buffer{ 8192 };   // 接收数据的数组
-	http::request<http::dynamic_body> _request;  // 接收 http 请求
+	http::request<http::dynamic_body> _request;   // 接收 http 请求
 	http::response<http::dynamic_body> _response; // 回复请求
 	net::steady_timer deadline_{
 		_socket.get_executor(),  // 拿到 socket 的调度器

@@ -6,7 +6,7 @@ RPConPool::RPConPool(size_t poolsize, std::string host, std::string port) : pool
 	for (size_t i = 0; i < poolSize_; ++i) {
 		std::shared_ptr<Channel> channel = grpc::CreateChannel(host + ":" + port, grpc::InsecureChannelCredentials());
 		// stub_ = VarifyService::NewStub(channel);    // 信使相当于电话员， channel 相当于电话，通过 channel 与服务器通信
-		connections_.push(VarifyService::NewStub(channel));
+		connections_.push(VarifyService::NewStub(channel));  // grpc 在使用的时候，就关注两个东西， channel 和 stub
 	}
 }
 

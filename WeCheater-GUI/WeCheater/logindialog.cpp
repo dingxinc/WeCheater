@@ -72,7 +72,7 @@ void LoginDialog::slot_forget_pwd()
 void LoginDialog::slot_login_mod_finish(ReqId id, QString res, ErrorCodes err)
 {
     if(err != ErrorCodes::SUCCESS){
-        showTip(tr("网络请求错误"),false);
+        showTip(tr("网络请求错误"), false);
         return;
     }
 
@@ -80,13 +80,13 @@ void LoginDialog::slot_login_mod_finish(ReqId id, QString res, ErrorCodes err)
     QJsonDocument jsonDoc = QJsonDocument::fromJson(res.toUtf8());
     //json解析错误
     if(jsonDoc.isNull()){
-        showTip(tr("json解析错误"),false);
+        showTip(tr("json解析错误"), false);
         return;
     }
 
     //json解析错误
     if(!jsonDoc.isObject()){
-        showTip(tr("json解析错误"),false);
+        showTip(tr("json解析错误"), false);
         return;
     }
 

@@ -25,6 +25,9 @@ private:
     ChatUIMode _mode;
     ChatUIMode _state;
     bool _b_loading;   // 负责加载的成员变量
+
+private slots:
+    void slot_loading_chat_user();
 };
 
 #endif // CHATDIALOG_H

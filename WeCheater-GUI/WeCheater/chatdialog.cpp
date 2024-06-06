@@ -3,6 +3,7 @@
 #include <QAction>
 #include <QRandomGenerator>
 #include "chatuserwid.h"
+#include "loadingdialog.h"
 
 ChatDialog::ChatDialog(QWidget *parent) :
     QDialog(parent),
@@ -47,6 +48,8 @@ ChatDialog::ChatDialog(QWidget *parent) :
     });
 
     ShowSearch(false);
+
+    connect(ui->chat_user_list, &ChatUserList::sig_loading_chat_user, this, &ChatDialog::slot_loading_chat_user);
 
     // 测试聊天信息的 item 加载
     addChatUserList();
@@ -105,20 +108,38 @@ void ChatDialog::addChatUserList()
 
 void ChatDialog::ShowSearch(bool bsearch)
 {
-    if(bsearch){
+    if (bsearch) {
         ui->chat_user_list->hide();
         ui->con_user_list->hide();
         ui->search_list->show();
         _mode = ChatUIMode::SearchMode;
-    }else if(_state == ChatUIMode::ChatMode){
+    } else if (_state == ChatUIMode::ChatMode){
         ui->chat_user_list->show();
         ui->con_user_list->hide();
         ui->search_list->hide();
         _mode = ChatUIMode::ChatMode;
-    }else if(_state == ChatUIMode::ContactMode){
+    } else if (_state == ChatUIMode::ContactMode){
         ui->chat_user_list->hide();
         ui->search_list->hide();
         ui->con_user_list->show();
         _mode = ChatUIMode::ContactMode;
     }
+}
+
+void ChatDialog::slot_loading_chat_user()
+{
+    if(_b_loading) {
+        return;
+    }
+
+    _b_loading = true;
+    LoadingDialog *loadingDialog = new LoadingDialog(this);
+    loadingDialog->setModal(true);
+    loadingDialog->show();
+    qDebug() << "add new data to list.....";
+    addChatUserList();
+    // 加载完成后关闭对话框
+    loadingDialog->deleteLater();
+
+    _b_loading = false;
 }

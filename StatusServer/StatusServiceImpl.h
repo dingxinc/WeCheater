@@ -19,6 +19,7 @@ struct ChatServer {
 	std::string name;
 	int con_count;
 };
+
 class StatusServiceImpl final : public StatusService::Service
 {
 public:

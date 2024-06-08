@@ -27,12 +27,12 @@ std::string& Session::GetUuid() {
 }
 
 void Session::Start(){
-	AsyncReadHead(HEAD_TOTAL_LEN);
+	AsyncReadHead(HEAD_TOTAL_LEN);  // 服务器接收的时候首先接收头部
 }
 
 void Session::Send(std::string msg, short msgid) {
 	std::lock_guard<std::mutex> lock(_send_lock);
-	int send_que_size = _send_que.size();   // 异步发送为什么使用队列？队列能保证异步发送数据的有序性
+	int send_que_size = _send_que.size();   // 异步发送为什么使用队列？队列能保证异步发送数据的有序性，另外一个就是解耦
 	if (send_que_size > MAX_SENDQUE) {
 		std::cout << "session: " << _uuid << " send que fulled, size is " << MAX_SENDQUE << std::endl;
 		return;
@@ -44,7 +44,7 @@ void Session::Send(std::string msg, short msgid) {
 	}
 	auto& msgnode = _send_que.front();
 	boost::asio::async_write(_socket, boost::asio::buffer(msgnode->_data, msgnode->_total_len),
-		std::bind(&Session::HandleWrite, this, std::placeholders::_1, SharedSelf()));
+		std::bind(&Session::HandleWrite, this, std::placeholders::_1, SharedSelf()));// 发完了之后会调用 HandleWrite 这个回调函数
 }
 
 void Session::Send(char* msg, short max_length, short msgid) {
@@ -75,7 +75,7 @@ std::shared_ptr<Session>Session::SharedSelf() {
 
 void Session::AsyncReadBody(int total_len)
 {
-	auto self = shared_from_this();
+	auto self = shared_from_this();   // 这个智能指针和其他管理 Session 的智能指针是共享引用计数的
 	asyncReadFull(total_len, [self, this, total_len](const boost::system::error_code& ec, std::size_t bytes_transfered) {
 		try {
 			if (ec) {
@@ -94,7 +94,7 @@ void Session::AsyncReadBody(int total_len)
 			}
 
 			memcpy(_recv_msg_node->_data , _data , bytes_transfered);
-			_recv_msg_node->_cur_len += bytes_transfered;
+			_recv_msg_node->_cur_len += bytes_transfered;         // 当前读取的字节做一次偏移
 			_recv_msg_node->_data[_recv_msg_node->_total_len] = '\0';
 			std::cout << "receive data is " << _recv_msg_node->_data << std::endl;
 			//此处将消息投递到逻辑队列中
@@ -111,6 +111,8 @@ void Session::AsyncReadBody(int total_len)
 void Session::AsyncReadHead(int total_len)
 {
 	auto self = shared_from_this();
+	// 这个函数标识，只有读完 HEAD_TOTAL_LEN 的长度之后，才会调用后面的回调函数，或者没读全但是出现了错误的时候才会回调这个函数
+	// 什么时候读全了，什么时候回调后面的函数
 	asyncReadFull(HEAD_TOTAL_LEN, [self, this](const boost::system::error_code& ec, std::size_t bytes_transfered) {
 		try {
 			if (ec) {
@@ -129,7 +131,7 @@ void Session::AsyncReadHead(int total_len)
 			}
 
 			_recv_head_node->Clear();
-			memcpy(_recv_head_node->_data, _data, bytes_transfered);
+			memcpy(_recv_head_node->_data, _data, bytes_transfered); // bytes_transfered 实际上是读取的长度，也就是头部的长度
 
 			//获取头部MSGID数据
 			short msg_id = 0;
@@ -194,23 +196,24 @@ void Session::HandleWrite(const boost::system::error_code& error, std::shared_pt
 void Session::asyncReadFull(std::size_t maxLength, std::function<void(const boost::system::error_code&, std::size_t)> handler )
 {
 	::memset(_data, 0, MAX_LENGTH);
-	asyncReadLen(0, maxLength, handler);
+	asyncReadLen(0, maxLength, handler);// 从 _data 的第 0 个位置开始读，读 maxLength 这个长度，如果读全了，就回调 handler 这个回调函数
 }
 
 //读取指定字节数
-void Session::asyncReadLen(std::size_t read_len, std::size_t total_len, 
+void Session::asyncReadLen(std::size_t read_len, std::size_t total_len, // read_len 表示已经读了字节数，假如说直接读了 5 个字节，那么下一次就从下标为 5 的位置开始读
 	std::function<void(const boost::system::error_code&, std::size_t)> handler)
 {
 	auto self = shared_from_this();
+	// _data + read_len 表示已经读的， total_len - read_len 表示未读的
 	_socket.async_read_some(boost::asio::buffer(_data + read_len, total_len - read_len),// 构造一个 buffer, 第一个参数是已经读的数据，第二个参数是未读的数据
 		[read_len, total_len, handler, self](const boost::system::error_code& ec, std::size_t  bytesTransfered) {
 			if (ec) {
 				// 出现错误，调用回调函数
-				handler(ec, read_len + bytesTransfered);
+				handler(ec, read_len + bytesTransfered);// 上次读取的长度 + 这次读取的长度 = 这次已经读取的长度
 				return;
 			}
 
-			if (read_len + bytesTransfered >= total_len) {
+			if (read_len + bytesTransfered >= total_len) {// 已经读取的长度 + 这次读取的长度
 				//长度够了就调用回调函数
 				handler(ec, read_len + bytesTransfered);
 				return;

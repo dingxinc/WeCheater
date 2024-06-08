@@ -6,7 +6,7 @@ class RedisConPool {
 public:
     RedisConPool(size_t poolsize, const char* host, int port, const char* pwd) : poolSize_(poolsize), host_(host), port_(port), b_stop_(false) {
         for (size_t i = 0; i < poolSize_; ++i) {
-            auto* context = redisConnect(host, port);
+            auto* context = redisConnect(host, port);           // 建立连接 redis
             if (context == nullptr || (context->err != 0)) {
                 if (context != nullptr) {
                     redisFree(context);

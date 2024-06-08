@@ -39,11 +39,11 @@ TcpMgr::TcpMgr():_host(""),_port(0),_b_recv_pending(false),_message_id(0),_messa
 
             //buffer剩余长读是否满足消息体长度，不满足则退出继续等待接受
            if(_buffer.size() < _message_len){  // 数据没收全
-                _b_recv_pending = true;
+                _b_recv_pending = true;        // 不用处理头部了，头部已经处理完了，再次收到数据直接走到这里来
                 return;
            }
 
-           _b_recv_pending = false;
+           _b_recv_pending = false;     // 一个包收全了，等待下一次收包，还要处理头部
            // 读取消息体
            QByteArray messageBody = _buffer.mid(0, _message_len);
            qDebug() << "receive body msg is " << messageBody ;
@@ -134,6 +134,7 @@ void TcpMgr::initHandlers()
             return;
         }
 
+        // 把数据存起来
         UserMgr::GetInstance()->SetUid(jsonObj["uid"].toInt());
         UserMgr::GetInstance()->SetName(jsonObj["name"].toString());
         UserMgr::GetInstance()->SetToken(jsonObj["token"].toString());
@@ -143,7 +144,7 @@ void TcpMgr::initHandlers()
 
 void TcpMgr::handleMsg(ReqId id, int len, QByteArray data)
 {
-   auto find_iter =  _handlers.find(id);
+   auto find_iter =  _handlers.find(id);  // find_iter 是一个迭代器
    if(find_iter == _handlers.end()){
         qDebug()<< "not found id ["<< id << "] to handle";
         return ;
@@ -159,7 +160,7 @@ void TcpMgr::slot_tcp_connect(ServerInfo si)
     qDebug() << "Connecting to server...";
     _host = si.Host;
     _port = static_cast<uint16_t>(si.Port.toUInt());
-    _socket.connectToHost(si.Host, _port);
+    _socket.connectToHost(si.Host, _port);  // 连接成功会触发 &QTcpSocket::connected 的信号
 }
 
 void TcpMgr::slot_send_data(ReqId reqId, QString data)

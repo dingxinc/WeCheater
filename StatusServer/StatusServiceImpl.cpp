@@ -19,7 +19,7 @@ Status StatusServiceImpl::GetChatServer(ServerContext* context, const GetChatSer
 	reply->set_host(server.host);
 	reply->set_port(server.port);
 	reply->set_error(ErrorCodes::Success);
-	reply->set_token(generate_unique_string());
+	reply->set_token(generate_unique_string());    // 当我们把 Reply 设置好参数后，Grpc 底层会把 Reply 返回给客户端
 	insertToken(request->uid(), reply->token());
 	return Status::OK;
 }

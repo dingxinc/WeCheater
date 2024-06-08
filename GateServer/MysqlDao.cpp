@@ -21,7 +21,7 @@ int MysqlDao::RegUser(const std::string& name, const std::string& email, const s
 	auto con = pool_->getConnection();
 	try {
 		if (con == nullptr) {
-			return false;
+			return -1;
 		}
 		// 准备调用存储过程
 		std::unique_ptr<sql::PreparedStatement> stmt(con->_con->prepareStatement("CALL reg_user(?,?,?,@result)"));
@@ -56,6 +56,7 @@ int MysqlDao::RegUser(const std::string& name, const std::string& email, const s
 	}
 }
 
+// 检查邮箱是否存在
 bool MysqlDao::CheckEmail(const std::string& name, const std::string& email) {
 	auto con = pool_->getConnection();
 	try {

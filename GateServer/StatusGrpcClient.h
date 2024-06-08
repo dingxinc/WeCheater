@@ -85,7 +85,7 @@ public:
 
 	}
 	GetChatServerRsp GetChatServer(int uid);
-	// LoginRsp Login(int uid, std::string token);
+	 LoginRsp Login(int uid, std::string token);
 private:
 	StatusGrpcClient();
 	std::unique_ptr<StatusConPool> pool_;

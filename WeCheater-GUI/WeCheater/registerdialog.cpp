@@ -55,14 +55,14 @@ RegisterDialog::RegisterDialog(QWidget *parent) :
 
     ui->confirm_visible->SetState("unvisible","unvisible_hover","","visible",
                                     "visible_hover","");
-    //连接点击事件，密码编辑框和 眼睛 clickedLable 之间的信号与槽
 
+    //连接点击事件，密码编辑框和 眼睛 clickedLable 之间的信号与槽
     connect(ui->pass_visible, &ClickedLabel::clicked, this, [this]() {
         auto state = ui->pass_visible->GetCurState();
         if(state == ClickLbState::Normal){
             ui->pass_edit->setEchoMode(QLineEdit::Password);
         }else{
-                ui->pass_edit->setEchoMode(QLineEdit::Normal);
+            ui->pass_edit->setEchoMode(QLineEdit::Normal);
         }
         qDebug() << "Label was clicked!";
     });
@@ -72,7 +72,7 @@ RegisterDialog::RegisterDialog(QWidget *parent) :
         if(state == ClickLbState::Normal){
             ui->confirm_edit->setEchoMode(QLineEdit::Password);
         }else{
-                ui->confirm_edit->setEchoMode(QLineEdit::Normal);
+            ui->confirm_edit->setEchoMode(QLineEdit::Normal);
         }
         qDebug() << "Label was clicked!";
     });
@@ -332,7 +332,7 @@ void RegisterDialog::on_sure_btn_clicked()
         return;
     }
 
-    //day11 发送http请求注册用户
+    // 发送http请求注册用户
     QJsonObject json_obj;
     json_obj["user"] = ui->user_edit->text();
     json_obj["email"] = ui->email_edit->text();

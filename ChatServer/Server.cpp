@@ -29,6 +29,7 @@ void Server::HandleAccept(shared_ptr<Session> new_session, const boost::system::
 void Server::StartAccept() {
 	auto &io_context = AsioIOServicePool::GetInstance()->GetIOService();
 	shared_ptr<Session> new_session = make_shared<Session>(io_context, this);
+	// 调用类的成员函数的时候，其实就是调用一个函数，然后把类的地址传进去。
 	_acceptor.async_accept(new_session->GetSocket(), std::bind(&Server::HandleAccept, this, new_session, placeholders::_1));
 }
 

@@ -35,7 +35,7 @@ void LogicSystem::DealMsg() {
 		}
 
 		//判断是否为关闭状态，把所有逻辑执行完后则退出循环
-		if (_b_stop ) {
+		if (_b_stop ) {// 服务器要关了，弹出所有的消息，处理一下
 			while (!_msg_que.empty()) {
 				auto msg_node = _msg_que.front();
 				cout << "recv_msg id  is " << msg_node->_recvnode->_msg_id << endl;

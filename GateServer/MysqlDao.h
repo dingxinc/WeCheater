@@ -27,11 +27,11 @@ public:
 			_check_thread = std::thread([this]() {
 				while (!b_stop_) {
 					checkConnection();
-					std::this_thread::sleep_for(std::chrono::seconds(60));
+					std::this_thread::sleep_for(std::chrono::seconds(60));   // 每隔 60s 检测一次
 				}
 			});
 
-			_check_thread.detach();
+			_check_thread.detach();  // 守护线程的方式运行
 		}
 		catch (sql::SQLException& e) {
 			// 处理异常
@@ -41,7 +41,7 @@ public:
 
 	void checkConnection() {
 		std::lock_guard<std::mutex> guard(mutex_);
-		int poolsize = pool_.size();
+		int poolsize = pool_.size();  // 这个 size 要提前取出来，作为一个副本，不然这个 size 的大小变了，会造成死循环
 		// 获取当前时间戳
 		auto currentTime = std::chrono::system_clock::now().time_since_epoch();
 		// 将时间戳转换为秒
@@ -53,13 +53,13 @@ public:
 				pool_.push(std::move(con));
 			});
 
-			if (timestamp - con->_last_oper_time < 5) {
+			if (timestamp - con->_last_oper_time < 60) {  // 小于 60 秒这个连接可以继续操作，大于 60s 则查询一次，和 MySQL 之间建立联系
 				continue;
 			}
 
 			try {
 				std::unique_ptr<sql::Statement> stmt(con->_con->createStatement());
-				stmt->executeQuery("SELECT 1");
+				stmt->executeQuery("SELECT 1");  // 主动的发起一个连接
 				con->_last_oper_time = timestamp;
 				//std::cout << "execute timer alive query , cur is " << timestamp << std::endl;
 			}

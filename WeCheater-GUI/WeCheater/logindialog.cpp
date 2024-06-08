@@ -240,7 +240,6 @@ void LoginDialog::slot_tcp_con_finish(bool bsuccess)
       showTip(tr("网络异常"),false);
       enableBtn(true);
    }
-
 }
 
 void LoginDialog::slot_login_failed(int err)

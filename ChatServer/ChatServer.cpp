@@ -29,7 +29,7 @@ int main()
 
 		auto port_str = cfg["SelfServer"]["Port"];
 		Server s(io_context, atoi(port_str.c_str()));
-		io_context.run();
+		io_context.run();// 如果 io_context 在 run 的时候没有绑定任何的事件，那么就会直接退出，在构造服务器的时候，绑定了一个异步监听的事件，所以这里不会退出
 	}
 	catch (std::exception& e) {
 		std::cerr << "Exception: " << e.what() << endl;

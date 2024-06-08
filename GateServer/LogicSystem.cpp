@@ -121,7 +121,7 @@ LogicSystem::LogicSystem()
 
 		//先查找redis中email对应的验证码是否合理
 		std::string  varify_code;
-		bool b_get_varify = RedisMgr::GetInstance()->Get(CODEPREFIX + src_root["email"].asString(), varify_code);
+		bool b_get_varify = RedisMgr::GetInstance()->Get(CODEPREFIX + src_root["email"].asString(), varify_code);// 根据键拿到值
 		if (!b_get_varify) {
 			std::cout << " get varify code expired" << std::endl;
 			root["error"] = ErrorCodes::VarifyExpired;

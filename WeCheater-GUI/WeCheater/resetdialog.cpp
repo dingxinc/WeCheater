@@ -188,10 +188,10 @@ void ResetDialog::initHandlers()
         }
         auto email = jsonObj["email"].toString();
         showTip(tr("验证码已发送到邮箱，注意查收"), true);
-        qDebug()<< "email is " << email ;
+        qDebug()<< "email is " << email;
     });
 
-    //注册注册用户回包逻辑
+    //修改密码回包逻辑
     _handlers.insert(ReqId::ID_RESET_PWD, [this](QJsonObject jsonObj){
         int error = jsonObj["error"].toInt();
         if(error != ErrorCodes::SUCCESS){
@@ -201,7 +201,7 @@ void ResetDialog::initHandlers()
         auto email = jsonObj["email"].toString();
         showTip(tr("重置成功,点击返回登录"), true);
         qDebug()<< "email is " << email ;
-        qDebug()<< "user uuid is " <<  jsonObj["uuid"].toString();
+        // qDebug()<< "user uuid is " <<  jsonObj["uuid"].toString();
     });
 }
 

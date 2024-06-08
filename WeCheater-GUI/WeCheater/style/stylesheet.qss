@@ -272,7 +272,7 @@ LoadingDialog{
 }
 
 #chat_data_list{
-     background: black;
+     background: #f0f0f0;
 }
 
 #chat_bg{

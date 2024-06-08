@@ -30,7 +30,7 @@ void TimerBtn::mouseReleaseEvent(QMouseEvent *e)
         // 在这里处理鼠标左键释放事件
         qDebug() << "MyButton was released!";
         this->setEnabled(false);
-         this->setText(QString::number(_counter));
+        this->setText(QString::number(_counter));
         _timer->start(1000);   // 每 1 S 触发一次
         emit clicked();
     }

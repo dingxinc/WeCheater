@@ -34,3 +34,11 @@ int main()
 		std::cout << "exception is " << e.what() << std::endl;
 	}
 }
+
+//int main() {
+//	std::vector<int> _vec{ 1,2,3,4,5 };
+//	for (int i = 0; i < _vec.size(); ++i) {
+//		std::cout << _vec[i] << std::endl;
+//		_vec.pop_back();
+//	}
+//}

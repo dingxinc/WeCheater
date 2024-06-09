@@ -50,7 +50,7 @@ ChatServer StatusServiceImpl::getChatServer() {
 			minServer = server.second;
 		}
 	}
-
+	// minServer.con_count++;
 	return minServer;
 }
 

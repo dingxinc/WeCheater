@@ -13,7 +13,8 @@
 #include <unordered_map>
 #include "data.h"
 
-typedef  function<void(shared_ptr<Session>, const short &msg_id, const string &msg_data)> FunCallBack;
+using FunCallBack = function<void(shared_ptr<Session>, const short &msg_id, const string &msg_data)>;
+
 class LogicSystem:public Singleton<LogicSystem>
 {
 	friend class Singleton<LogicSystem>;
@@ -26,6 +27,8 @@ private:
 	void DealMsg();
 	void RegisterCallBacks();
 	void LoginHandler(shared_ptr<Session>, const short &msg_id, const string &msg_data);
+
+private:
 	std::thread _worker_thread;
 	std::queue<shared_ptr<LogicNode>> _msg_que;
 	std::mutex _mutex;

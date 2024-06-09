@@ -44,6 +44,8 @@ private:
 	
 	
 	void HandleWrite(const boost::system::error_code& error, std::shared_ptr<Session> shared_self);
+
+private:
 	tcp::socket _socket;
 	std::string _uuid;
 	char _data[MAX_LENGTH];

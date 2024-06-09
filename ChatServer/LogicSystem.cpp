@@ -7,7 +7,7 @@ using namespace std;
 
 LogicSystem::LogicSystem():_b_stop(false){
 	RegisterCallBacks();
-	_worker_thread = std::thread (&LogicSystem::DealMsg, this);
+	_worker_thread = std::thread(&LogicSystem::DealMsg, this);
 }
 
 LogicSystem::~LogicSystem(){

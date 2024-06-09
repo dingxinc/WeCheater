@@ -177,7 +177,7 @@ std::shared_ptr<UserInfo> MysqlDao::GetUser(int uid)
 
 	Defer defer([this, &con]() {
 		pool_->returnConnection(std::move(con));
-		});
+	});
 
 	try {
 		// ×¼±¸SQLÓï¾ä

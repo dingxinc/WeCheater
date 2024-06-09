@@ -26,9 +26,9 @@ public:
 		_cur_len = 0;
 	}
 
-	short _cur_len;
-	short _total_len;
-	char* _data;
+	short _cur_len;       // 当前长度
+	short _total_len;     // 总长度
+	char* _data;          // 数据域
 };
 
 class RecvNode :public MsgNode {

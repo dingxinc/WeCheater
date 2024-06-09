@@ -26,7 +26,7 @@ std::string& Session::GetUuid() {
 	return _uuid;
 }
 
-void Session::Start(){
+void Session::Start() {
 	AsyncReadHead(HEAD_TOTAL_LEN);  // 服务器接收的时候首先接收头部
 }
 
@@ -42,7 +42,7 @@ void Session::Send(std::string msg, short msgid) {
 	if (send_que_size > 0) {
 		return;
 	}
-	auto& msgnode = _send_que.front();
+	auto& msgnode = _send_que.front();   // 把刚投递的消息取出来
 	boost::asio::async_write(_socket, boost::asio::buffer(msgnode->_data, msgnode->_total_len),
 		std::bind(&Session::HandleWrite, this, std::placeholders::_1, SharedSelf()));// 发完了之后会调用 HandleWrite 这个回调函数
 }
@@ -189,11 +189,10 @@ void Session::HandleWrite(const boost::system::error_code& error, std::shared_pt
 	catch (std::exception& e) {
 		std::cerr << "Exception code : " << e.what() << endl;
 	}
-	
 }
 
 //读取完整长度
-void Session::asyncReadFull(std::size_t maxLength, std::function<void(const boost::system::error_code&, std::size_t)> handler )
+void Session::asyncReadFull(std::size_t maxLength, std::function<void(const boost::system::error_code&, std::size_t)> handler)
 {
 	::memset(_data, 0, MAX_LENGTH);
 	asyncReadLen(0, maxLength, handler);// 从 _data 的第 0 个位置开始读，读 maxLength 这个长度，如果读全了，就回调 handler 这个回调函数
